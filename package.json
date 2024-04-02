@@ -13,9 +13,16 @@
     "production": "mix --production"
   },
   "dependencies": {
+    "axios": "^1.6.8",
+    "connect-mongo": "^5.1.0",
+    "dotenv": "^16.4.5",
     "ejs": "^3.1.9",
     "express": "^4.19.2",
-    "express-ejs-layouts": "^2.5.1"
+    "express-ejs-layouts": "^2.5.1",
+    "express-flash": "^0.0.2",
+    "express-session": "^1.18.0",
+    "mongoose": "^8.2.4",
+    "noty": "^3.2.0-beta-deprecated"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
