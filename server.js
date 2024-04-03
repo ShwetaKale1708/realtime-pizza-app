@@ -7,6 +7,8 @@ const session=require('express-session')
 require('dotenv').config()
 const flash=require('express-flash')
 const MongoDbStore=require('connect-mongo')
+const passport=require('passport')
+
 
 const url='mongodb://localhost:27017/pizza'
 mongoose.connect(url)
@@ -18,6 +20,8 @@ connection.once('open',()=>{
 const app= express()
 
 const PORT=process.env.PORT || 3300
+
+
 
 let mongoStore=new MongoDbStore({
     mongoUrl:url,
@@ -33,14 +37,24 @@ app.use(session({
     saveUninitialized:false,
     cookie:{maxAge:1000*60*60*24}
 }))
+
+const passportInit=require('./app/config/passport')
+passportInit(passport)
+
+app.use(passport.initialize())
+app.use(passport.session())
+
 app.use((req,res,next)=>{
     res.locals.session=req.session
+    res.locals.user=req.user
     next()
 })
 app.use(flash())
 app.use(express.json())
 app.set('views',path.join(__dirname,'/resources/views'))
 app.set('view engine','ejs')
+app.use(express.urlencoded({extended:false}))
+
 
 require('./routes/web')(app)
 
