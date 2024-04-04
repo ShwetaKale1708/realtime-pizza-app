@@ -8,6 +8,8 @@ require('dotenv').config()
 const flash=require('express-flash')
 const MongoDbStore=require('connect-mongo')
 const passport=require('passport')
+const Emitter=require('events')
+
 
 
 const url='mongodb://localhost:27017/pizza'
@@ -27,6 +29,11 @@ let mongoStore=new MongoDbStore({
     mongoUrl:url,
     collection:'sessions'
 })
+
+// event emitter
+
+const eventEmitter = new Emitter()
+app.set('eventEmitter',eventEmitter)
 
 app.use(express.static('public'))
 app.use(expressLayout)
@@ -61,6 +68,28 @@ require('./routes/web')(app)
 
 
 
-app.listen(PORT,()=>{
+const server=app.listen(PORT,()=>{
     console.log(`Listening on port ${PORT}`)
+})
+
+
+// socket
+
+const io=require('socket.io')(server)
+
+io.on('connection',(socket)=>{
+    // join
+    
+    socket.on('join',(orderId)=>{
+        
+        socket.join(orderId)
+    })
+})
+
+eventEmitter.on('orderUpdated',(data)=>{
+    io.to(`order_${data.id}`).emit('orderUpdated',data)
+})
+
+eventEmitter.on('orderPlaced',(data)=>{
+    io.to('adminRoom').emit('orderPlaced',data)
 })
