@@ -417,3 +417,24 @@ section.status {
   font-size: 14px;
   margin-top: 8px;
 }
+
+@media (max-width: 1060px) {
+  .container {
+    max-width: 100%;
+  }
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
+@media (max-width: 768px) {
+  .status-box ul li span:before {
+    font-size: 34px;
+  }
+}
+@media (max-width: 570px) {
+  nav li:last-child a {
+    padding: 0.3rem 1.3rem;
+  }
+}
