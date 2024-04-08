@@ -1,14 +1,28 @@
 const Order=require('../../../models/order')
 const moment=require('moment')
+const { body, validationResult, check}=require('express-validator')
 
 function orderController(){
+    
     return {
-        store(req,res){
+        async store(req,res){
             const {phone,address}=req.body
             if(!phone || !address){
                 req.flash('error','All fields are required')
+                req.flash('phone',phone)
+                req.flash('address',address)
                 return res.redirect('/cart')
             } 
+            await check('phone').isLength({min:10,max:10}).withMessage('mobile number should be of 10 digits').run(req)
+            await check('address').isLength({ min: 8 }).withMessage('address should have atleast 8 characters').run(req)
+            const errors = validationResult(req);
+                if (!errors.isEmpty()) {
+       
+                    req.flash('error', errors.array()[0].msg);
+                    req.flash('phone',phone)
+                    req.flash('address',address)
+                    return res.redirect('/cart');
+    }
             const order=new Order({
                 customerId: req.user._id,
                 items:req.session.cart.items,
