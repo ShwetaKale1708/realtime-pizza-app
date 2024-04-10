@@ -1,6 +1,7 @@
 const Order=require('../../../models/order')
 const moment=require('moment')
 const { body, validationResult, check}=require('express-validator')
+const Menu=require('../../../models/menu')
 
 function orderController(){
     
@@ -49,20 +50,39 @@ function orderController(){
 
         async index(req,res){
             const orders =await Order.find({customerId:req.user._id},null,{sort:{'createdAt':-1}})
+            
             res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0')
-            res.render('customers/orders',{orders:orders,moment:moment})
-            // console.log(orders)
+                    res.render('customers/orders',{orders:orders,moment:moment})
+        
+            
+            console.log(orders)
         },
         
         async show(req,res){
             const order=await Order.findById(req.params.id)
+            
             if(req.user._id.toString() === order.customerId.toString()){
-                return res.render('customers/singleOrder',{order})
+                return res.render('customers/singleOrder',{order:order,moment:moment})
             }
                 return res.redirect('/')
             
-        }
+        },
+
+        async remove(req,res){
+            let pizza= await Menu.findById(req.params.id)
+            req.session.cart.totalQTY=req.session.cart.totalQTY-req.session.cart.items[req.params.id].qty
+            req.session.cart.totalPrice=req.session.cart.totalPrice-pizza.price*req.session.cart.items[req.params.id].qty
+            req.session.cart.items[req.params.id].qty= 0
+            delete req.session.cart.items[req.params.id]
+            if(req.session.cart.totalQTY===0){
+                return res.redirect('/')
+            }
+           
+            
+            
+        return res.redirect('/cart')
     }
+}
 }
 
 module.exports=orderController

@@ -9,7 +9,7 @@ const { body, validationResult, check}=require('express-validator')
 function authController(){
 
 const _getRedirectUrl=(req)=>{
-    return req.user.role==='admin'? '/admin/orders':'/customer/orders'
+    return req.user.role==='admin'? '/admin/orders':'/'
 }
 
     // factory function=> returns object
@@ -42,6 +42,7 @@ const _getRedirectUrl=(req)=>{
                         
                         return next(err)
                     }
+                    
                     return res.redirect(_getRedirectUrl(req))
                 })
             })(req,res,next)

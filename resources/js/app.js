@@ -49,11 +49,18 @@ if(alertMsg){
 let statuses= document.querySelectorAll('.status-line')
 
 let hiddenInput=document.querySelector('#hiddenInput')
+console.log(hiddenInput,'hidden')
 let order=hiddenInput ? hiddenInput.value : null
+
 order=JSON.parse(order)
 let time= document.createElement('small')
 
 function updateStatus(order){
+    console.log(order,'order')
+    // if(moment().diff(moment(order.createdAt))/(1000*60*60)>1){
+        
+    // }
+
     statuses.forEach((status)=>{
         status.classList.remove('step-completed')
         status.classList.remove('current')
@@ -66,7 +73,7 @@ function updateStatus(order){
         }
         if(dataProp === order.status){
             stepCompleted=false
-            time.innerText=moment(order.updatedAt).format('hh:mm A')
+            time.innerText=moment(order.updatedAt).format('DD-MM-YYYY hh:mm A')
             status.appendChild(time)
             if(status.nextElementSibling){
                 status.nextElementSibling.classList.add('current')

@@ -251,6 +251,10 @@ nav li:last-child a:hover {
   background: #b23301;
 }
 
+.admin-logout {
+  background-color: #fff;
+}
+
 nav li a {
   transition: all 0.3s ease-in-out;
 }

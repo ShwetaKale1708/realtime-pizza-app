@@ -12,7 +12,7 @@ const Emitter=require('events')
 
 
 
-const url='mongodb://localhost:27017/pizza'
+const url=process.env.URL
 mongoose.connect(url)
 const connection=mongoose.connection
 connection.once('open',()=>{

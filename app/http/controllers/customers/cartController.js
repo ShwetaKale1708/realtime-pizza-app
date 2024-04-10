@@ -1,3 +1,5 @@
+
+
 function cartController(){
     
     return{
@@ -13,7 +15,7 @@ function cartController(){
             //     totalQty:0,
             //     totalPrice:0
             // }
-
+            
             if(!req.session.cart){
                 req.session.cart={
                     items:{},
@@ -22,8 +24,10 @@ function cartController(){
                 }
                 
             }
-            let cart=req.session.cart
+            
+                let cart=req.session.cart
             // console.log(req.body)
+            if(req.session.cart.totalQTY<10){
             if(!cart.items[req.body._id]){
                  cart.items[req.body._id]={
                     item:req.body,
@@ -37,7 +41,12 @@ function cartController(){
                     cart.totalPrice=cart.totalPrice+req.body.price
                 }
             res.json({totalQTY:req.session.cart.totalQTY})
-        }
+            }
+            
+           
+            
+        
+    }
     }
 }
 

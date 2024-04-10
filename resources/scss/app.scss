@@ -16,6 +16,10 @@ nav li:last-child a{
     }
 }
 
+.admin-logout{
+    background-color: $pure;
+}
+
 nav li a{
     transition: $smooth;
     &:hover{

@@ -1,5 +1,5 @@
 <section class="cart py-16">
-    <% if(session.cart){ %>
+    <% if(session.cart && session.cart.totalQTY!==0){ %>
     <div class="order container mx-auto xl:w-1/2 px-4">
         <div class="flex items-center border-b border-gray-300 pb-4">
             <img src="/img/cart-black.png" alt="">
@@ -7,15 +7,22 @@
         </div>
         <div class="pizza-list">
             <% for(let pizza of Object.values(session.cart.items)) { %>
+               
             <div class="flex items-center my-8">
                 <img class="w-24" src="/img/<%= pizza.item.image %>" alt="">
                 <div class="flex-1 ml-4">
                     <h1><%= pizza.item.name %></h1>
                     <span><%= pizza.item.size %></span>
+                   
                 </div>
+                
                 <span class="flex-1"><%= pizza.qty %> pcs</span>
                 <span class="font-bold text-lg">₹<%= pizza.item.price*pizza.qty %></span>
+                
             </div>
+            
+            <a class="flex flex-1 link" href="/remove/<%= pizza.item._id %>">remove</a>
+       
             <% } %>
         </div>
         <hr>
@@ -24,7 +31,7 @@
                 <span class="text-lg font-bold">Total Amount</span>
                 <span class="amount text-2xl font-bold ml-2">₹<%= session.cart.totalPrice %></span>
             </div>
-            <% if(user){ %>
+            <% if(user ){ %>
             <div>
                 <form action="/orders" method="POST" class="mt-12">
                     <% if(messages.error) { %>
@@ -33,6 +40,7 @@
                     <input name="phone" class="border border-gray-400 p-2 w-1/2 mb-4" type="text" placeholder="Phone Number">
                     <input name="address" class="border border-gray-400 p-2 w-1/2" type="text" placeholder="Address">
                     <div>
+
                         <button class="btn-primary px-6 py-2 rounded-full text-white font-bold mt-6" type="submit">Order Now</button>
                     </div>
                 </form>
